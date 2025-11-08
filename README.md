@@ -1,179 +1,130 @@
 # Enterprise Ui Playground
 
-学習／ポートフォリオ向けの**フルスタック・モノレポ**。  
-フロント（UIライブラリ + 検索アプリ）→BFF→マイクロサービスのアーキテクチャを実務寄りに再現します。  
-将来は別技術での複数実装も可能な拡張構造。
+学習・ポートフォリオ向けのフルスタック **モノレポ構成**。  
+Vue / NestJS / C# の実務に近いアーキテクチャと、テストピラミッドに則した品質戦略を実現。
 
 ---
 
-## ✅ 初回実装スタック
+## 🎯 目的
+
+- 実務レベルの構成でフロント → BFF → マイクロサービス構造を構築
+- きれいな設計・テスト・レイヤー分離・モック戦略を標準化
+- 複数スタックでの差し替えにも対応できる拡張構造
+- AI（Cursor など）でコードベースを生成/改善できる設計
+
+---
+
+## 🧪 テスト設計（テストピラミッド）
+
+| 種別 | 対象 | 目的 | 実行頻度 | モック |
+|---|---|---|---|---|
+| **UnitTest (70%目標)** | Logic / Service / Component | 仕様の正しさを高速検証 | PRごと | Moq / vi.mock / Jest Mock |
+| **IntegrationTest (25%)** | DB, 外部結合, Module連携 | 依存と連携の信頼性担保 | merge / nightly | TestContainers / MSW |
+| **Api/E2E (5%以内)** | Endpoint, 実リソース | 最終保証 | 手動 or staging | 実リソース / Playwright |
+
+---
+
+## 🏗 アーキテクチャ概要
 
 | レイヤー | 技術 |
 |---|---|
-| UI Library | Vue 3 + Vite + TailwindCSS + Storybook (MSW) |
-| Example App | Vue 3 + Vite + Vitest + `vi.mock` |
-| BFF | NestJS (REST) + Jest / Supertest |
-| Backend | C# .NET 8 レイヤードアーキテクチャ |
-| DB | Azure Cosmos DB |
-| Mapper | **Mapperly** (コンパイル時コード生成) |
-| Test | Vitest / vue-testing-library / Jest / xUnit |
-| Mock | Storybook → MSW / Vitest → vi mock |
+| UI Library | **Vue 3 + Vite + TailwindCSS + Storybook (MSW)** |
+| Front App | **Vue 3 + Vite + Vitest + @testing-library/vue + vi.mock** |
+| BFF | **NestJS (REST) + Jest + Supertest** |
+| Backend | **C# .NET 8 + Layered Architecture + CosmosDB** |
+| Mapper | **Mapperly（compile-time code generation）** |
 
 ---
 
-## 📁 ディレクトリ構造
+## 📁 推奨ディレクトリ構造
 
 ```
-
-/ (repo root)
+/ (root)
 ├─ README.md
-├─ .github/workflows/ci.yml
-├─ docker-compose.yml
-├─ .env.example
-├─ contracts/
-│  └─ openapi/search.yaml
-├─ tools/
-│  ├─ start.sh
-│  └─ gen-client.sh
+├─ contracts/ (OpenAPI)
+│  └─ search.yaml
 ├─ frontend/
-│  ├─ vue/
-│  │  ├─ ui-library/
-│  │  │  ├─ src/components/
-│  │  │  ├─ storybook/ (MSW設定含む)
-│  │  │  ├─ test/ (vue-testing-library)
-│  │  │  └─ package.json
-│  │  └─ example-app/
-│  │     ├─ src/pages/SearchPage.vue
-│  │     ├─ test/ (Vitest + vi mock)
-│  │     └─ package.json
-│  ├─ react/  (optional)
-│  └─ svelte/ (optional)
+│  └─ vue/
+│     ├─ ui-library/
+│     │  ├─ src/
+│     │  │  ├─ components/ (atoms/molecules/organisms)
+│     │  │  ├─ composables/
+│     │  │  └─ index.ts
+│     │  ├─ storybook/ (MSW)
+│     │  ├─ tests/ (Vitest + @testing-library/vue)
+│     │  └─ vite.config.ts
+│     └─ example-app/
+│        ├─ src/
+│        │  ├─ pages/
+│        │  ├─ components/ (container/presenter分離)
+│        │  ├─ composables/ (ロジック)
+│        │  └─ services/ (API client)
+│        └─ tests/ (vi.mock)
 ├─ bff/
 │  └─ nestjs-rest/
-│      ├─ src/
-│      │  ├─ modules/search/
-│      │  ├─ clients/
-│      │  └─ main.ts
-│      ├─ test/ (Jest + Supertest)
-│      └─ package.json
-├─ services/
-│  └─ csharp-search/
-│      ├─ Service1.sln
-│      ├─ Service1/
-│      │  ├─ Application/
-│      │  │  ├─ Models/
-│      │  │  ├─ Services/
-│      │  │  └─ Mappers/          ← ✅ Mapperly Mapper here
-│      │  ├─ Domain/Models/
-│      │  ├─ Infrastructure/Persistence/
-│      │  │  ├─ Common/
-│      │  │  └─ CosmosDb/
-│      │  │      ├─ Models/
-│      │  │      ├─ Repository/
-│      │  │      ├─ QueryService.cs
-│      │  │      └─ Services.cs
-│      │  ├─ WebApi/
-│      │  │  ├─ Configuration/
-│      │  │  ├─ Controllers/
-│      │  │  └─ Dockerfile
-│      │  └─ Tests/ (xUnit)
-├─ mcp-server/ (optional)
-├─ infra/
-└─ docs/
-
-````
-
----
-
-## ⚙️ 開発セットアップ
-
-### 🔹 1. Install
-```bash
-# UI Library
-cd frontend/vue/ui-library && pnpm i
-
-# Example App
-cd ../example-app && pnpm i
-
-# BFF
-cd ../../../bff/nestjs-rest && pnpm i
-````
-
-### 🔹 2. 起動
-
-```bash
-# Storybook（MSW有効）
-pnpm --filter ui-library storybook
-
-# Example App
-pnpm --filter example-app dev
-
-# BFF (Nest)
-pnpm --filter nestjs-rest start:dev
-
-# C# API
-cd services/csharp-search/Service1/WebApi
-dotnet run
+│     ├─ src/
+│     │  ├─ modules/search/
+│     │  ├─ clients/ (外部API抽象)
+│     │  └─ main.ts
+│     └─ test/ (Jest + Supertest)
+└─ services/
+   └─ csharp-search/
+      ├─ Service1/
+      │  ├─ Application/
+      │  │  ├─ Models/
+      │  │  ├─ Services/
+      │  │  └─ Mappers/ ← **Mapperly**
+      │  ├─ Domain/Models/
+      │  ├─ Infrastructure/Persistence/CosmosDb/
+      │  │  ├─ Repository/
+      │  │  ├─ QueryService.cs
+      │  │  └─ Services.cs
+      │  ├─ WebApi/Controllers/
+      │  └─ Tests/
+      │     ├─ UnitTests/ (Moq)
+      │     ├─ IntegrationTests/ (TestContainer)
+      │     └─ ApiTests/ (実リソース)
 ```
 
 ---
 
-## 🧪 テスト方針
+## ✅ 設計ルール
 
-| 対象          | テスト / モック                     |
-| ----------- | ----------------------------- |
-| UI Library  | Vitest + @testing-library/vue |
-| Storybook   | MSW で API モック                 |
-| Example App | Vitest + `vi.mock`            |
-| BFF         | Jest + Supertest              |
-| Backend C#  | xUnit (Unit / Integration)    |
+### フロント（Vue）
+- UI（pure）とロジック（composables）を分離
+- APIは `services` 層で wrapper 化しモック可能に
+- コンポーネントは **プレゼンテーショナル + コンテナ方式**
+- テストは `@testing-library/vue` で UIの振る舞いを検証
+- Storybook は **MSW でモック**
 
----
+### BFF（NestJS）
+- Controller は薄く、Service にビジネスロジックを集約
+- 外部APIは `clients/` として抽象化
+- Unit: Jest mock
+- 結合: Nest TestingModule + Supertest
 
-## 🧠 Mapperly 設定（Backend）
-
-### 📌 Package
-
-```bash
-dotnet add package Riok.Mapperly
-```
-
-### 📌 csproj
-
-```xml
-<ItemGroup>
-  <PackageReference Include="Riok.Mapperly" Version="4.3.0" ExcludeAssets="runtime" PrivateAssets="all" />
-</ItemGroup>
-
-<!-- 生成コードを確認したい時 -->
-<!--
-<PropertyGroup>
-  <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-  <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
-</PropertyGroup>
--->
-```
-
-### 📌 Mapper 定義
-
-```csharp
-[Mapper]
-public partial class SearchItemMapper
-{
-    public partial SearchItemDto ToDto(SearchItem entity);
-    public partial SearchItem FromDto(SearchItemDto dto);
-}
-```
+### Backend（C#）
+- Layered Architecture（Application / Domain / Infra / API）
+- DB は CosmosDB、クエリは Repository へ分離
+- マッピングは **Mapperly**
+- Unit: xUnit + Moq
+- Integration: TestContainers
+- API: Staging 実リソースで手動 or CI
 
 ---
 
-## 🚀 初回実装ロードマップ
+## 🧩 テスト実行コマンド（例）
 
-1. ✅ Vue UI Library（土台 + Storybook + MSW + テスト）
-2. ✅ Example Search App（UI Library使用 + vi.mockテスト）
-3. ✅ BFF（NestJS REST + Jestテスト）
-4. ✅ C# API（CosmosDB + Mapperly + xUnit）
-5. ✅ E2Eで「検索 → BFF → C# → Cosmos」導通
-6. ⬜ OpenAPI から TS Client 生成
-7. ⬜ Docker compose で一発起動
-8. ⬜ MCP server 追加
+```sh
+# frontend
+pnpm --filter ui-library test
+pnpm --filter example-app test
+
+# bff
+pnpm --filter nestjs-rest test
+
+# backend
+dotnet test Service1.Tests.UnitTests
+dotnet test Service1.Tests.IntegrationTests --filter Category=Integration
+dotnet test Service1.Tests.ApiTests --filter Category=Api
+```
