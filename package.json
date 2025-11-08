@@ -1,0 +1,27 @@
+{
+  "name": "production-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Production-grade monorepo with Vue3, NestJS BFF, and .NET Backend",
+  "scripts": {
+    "dev": "pnpm --parallel --stream dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "test:unit": "pnpm -r test:unit",
+    "test:integration": "pnpm -r test:integration",
+    "lint": "pnpm -r lint",
+    "format": "pnpm -r format",
+    "storybook": "pnpm --filter ui-library storybook",
+    "dotnet:build": "dotnet build packages/backend/Backend.sln",
+    "dotnet:test": "dotnet test packages/backend/Backend.sln",
+    "backend:dev": "cd packages/backend/src/Backend.WebApi && dotnet run",
+    "bff:dev": "pnpm --filter bff dev",
+    "search-app:dev": "pnpm --filter search-app dev",
+    "ui-library:dev": "pnpm --filter ui-library dev"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
