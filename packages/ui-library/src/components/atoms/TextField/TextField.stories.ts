@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import TextField from './TextField.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof TextField> = {
   title: 'Atoms/TextField',
@@ -49,13 +49,9 @@ const meta: Meta<typeof TextField> = {
     fullWidth: true,
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'value',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'value',
+    }),
   },
 }
 
@@ -68,13 +64,9 @@ export const Default: Story = {
     placeholder: 'Enter your name',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'name',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'name',
+    }),
   },
 }
 
@@ -85,13 +77,9 @@ export const WithValue: Story = {
     modelValue: 'user@example.com',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'email',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'email',
+    }),
   },
 }
 
@@ -103,13 +91,9 @@ export const Required: Story = {
     helperText: 'This field is required',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'username',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'username',
+    }),
   },
 }
 
@@ -121,21 +105,17 @@ export const WithError: Story = {
     error: 'Please enter a valid email address',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'email',
-          setup: [
-            `const emailError = computed(() => {`,
-            `  if (!email.value.includes('@')) {`,
-            `    return 'Please enter a valid email address'`,
-            `  }`,
-            `  return ''`,
-            `})`,
-          ],
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'email',
+      setup: [
+        `const emailError = computed(() => {`,
+        `  if (!email.value.includes('@')) {`,
+        `    return 'Please enter a valid email address'`,
+        `  }`,
+        `  return ''`,
+        `})`,
+      ],
+    }),
   },
 }
 
@@ -146,13 +126,9 @@ export const Disabled: Story = {
     disabled: true,
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'value',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'value',
+    }),
   },
 }
 
@@ -164,13 +140,9 @@ export const Password: Story = {
     helperText: 'Must be at least 8 characters',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'password',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'password',
+    }),
   },
 }
 
@@ -181,13 +153,9 @@ export const Number: Story = {
     placeholder: 'Enter your age',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'age',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'age',
+    }),
   },
 }
 
@@ -198,13 +166,9 @@ export const WithHelperText: Story = {
     helperText: 'Username must be 3-20 characters',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('TextField', {
-          vModel: 'username',
-        }),
-      },
-    },
+    ...createSourceParameters('TextField', {
+      vModel: 'username',
+    }),
   },
 }
 
@@ -234,7 +198,19 @@ export const AllTypes: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
+        code: `<script setup lang="ts">
+import { ref } from 'vue'
+import { TextField } from 'ui-library'
+
+const text = ref('')
+const email = ref('')
+const password = ref('')
+const phone = ref('')
+const number = ref('')
+const errorField = ref('Invalid value')
+</script>
+
+<template>
   <div class="space-y-6 max-w-md">
     <TextField v-model="text" label="Text Input" placeholder="Enter text" />
     <TextField v-model="email" label="Email" type="email" placeholder="email@example.com" />
@@ -252,19 +228,7 @@ export const AllTypes: Story = {
       model-value="This is disabled"
     />
   </div>
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { TextField } from 'ui-library'
-
-const text = ref('')
-const email = ref('')
-const password = ref('')
-const phone = ref('')
-const number = ref('')
-const errorField = ref('Invalid value')
-</script>`,
+</template>`,
       },
     },
   },

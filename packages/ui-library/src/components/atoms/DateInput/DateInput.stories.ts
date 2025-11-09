@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import DateInput from './DateInput.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof DateInput> = {
   title: 'Atoms/DateInput',
@@ -50,7 +50,7 @@ const meta: Meta<typeof DateInput> = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'date',
         }),
       },
@@ -68,7 +68,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'date',
         }),
       },
@@ -84,7 +84,7 @@ export const WithValue: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'birthDate',
         }),
       },
@@ -101,7 +101,7 @@ export const Required: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'startDate',
         }),
       },
@@ -119,7 +119,7 @@ export const WithMinMax: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'appointmentDate',
         }),
       },
@@ -136,7 +136,7 @@ export const WithError: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'endDate',
         }),
       },
@@ -153,7 +153,7 @@ export const Disabled: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'lockedDate',
         }),
       },
@@ -169,7 +169,7 @@ export const WithHelperText: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('DateInput', {
+        transform: createSourceParameters('DateInput', {
           vModel: 'eventDate',
         }),
       },

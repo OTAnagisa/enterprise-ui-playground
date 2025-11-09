@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import Button from './Button.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -37,13 +37,9 @@ const meta: Meta<typeof Button> = {
     type: 'button',
   },
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Button Text' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Button Text' },
+    }),
   },
 }
 
@@ -62,13 +58,9 @@ export const Primary: Story = {
     template: '<Button v-bind="args">Primary Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Primary Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Primary Button' },
+    }),
   },
 }
 
@@ -84,13 +76,9 @@ export const Secondary: Story = {
     template: '<Button v-bind="args">Secondary Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Secondary Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Secondary Button' },
+    }),
   },
 }
 
@@ -106,13 +94,9 @@ export const Outline: Story = {
     template: '<Button v-bind="args">Outline Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Outline Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Outline Button' },
+    }),
   },
 }
 
@@ -128,13 +112,9 @@ export const Danger: Story = {
     template: '<Button v-bind="args">Danger Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Danger Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Danger Button' },
+    }),
   },
 }
 
@@ -150,13 +130,9 @@ export const Disabled: Story = {
     template: '<Button v-bind="args">Disabled Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Disabled Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Disabled Button' },
+    }),
   },
 }
 
@@ -172,13 +148,9 @@ export const FullWidth: Story = {
     template: '<Button v-bind="args">Full Width Button</Button>',
   }),
   parameters: {
-    docs: {
-      source: {
-        transform: createSourceCodeTransformer('Button', {
-          slots: { default: 'Full Width Button' },
-        }),
-      },
-    },
+    ...createSourceParameters('Button', {
+      slots: { default: 'Full Width Button' },
+    }),
   },
 }
 

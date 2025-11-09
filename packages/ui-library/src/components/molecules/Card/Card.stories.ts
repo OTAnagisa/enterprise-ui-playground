@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import Card from './Card.vue'
 import Button from '../../atoms/Button/Button.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof Card> = {
   title: 'Molecules/Card',
@@ -44,7 +44,7 @@ const meta: Meta<typeof Card> = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { default: '<p class="text-gray-700">Card content</p>' },
         }),
       },
@@ -72,7 +72,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">This is the default card with some content inside.</p>' 
           },
@@ -102,7 +102,7 @@ export const WithTitle: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">This card has a title in the header.</p>' 
           },
@@ -226,7 +226,7 @@ export const Outlined: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">This card has an outlined variant with a thicker border.</p>' 
           },
@@ -257,7 +257,7 @@ export const Elevated: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">This card has an elevated variant with a shadow.</p>' 
           },
@@ -288,7 +288,7 @@ export const Hoverable: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">Hover over this card to see the shadow effect.</p>' 
           },
@@ -322,7 +322,7 @@ export const Clickable: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Card', {
+        transform: createSourceParameters('Card', {
           slots: { 
             default: '<p class="text-gray-700">Click this card to trigger an action.</p>' 
           },

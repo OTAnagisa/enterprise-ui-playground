@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import { ref, computed } from 'vue'
 import Calendar from './Calendar.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof Calendar> = {
   title: 'Organisms/Calendar',
@@ -28,7 +28,7 @@ const meta: Meta<typeof Calendar> = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Calendar', {
+        transform: createSourceParameters('Calendar', {
           vModel: 'selectedDate',
         }),
       },
@@ -50,7 +50,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Calendar', {
+        transform: createSourceParameters('Calendar', {
           vModel: 'selectedDate',
         }),
       },

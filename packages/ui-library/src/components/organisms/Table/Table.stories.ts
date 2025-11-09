@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3'
 import Table from './Table.vue'
 import type { TableColumn } from './Table.vue'
 import Button from '../../atoms/Button/Button.vue'
-import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
+import { createSourceParameters } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof Table> = {
   title: 'Organisms/Table',
@@ -66,7 +66,7 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Table'),
+        transform: createSourceParameters('Table'),
       },
     },
   },
@@ -81,7 +81,7 @@ export const Striped: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Table'),
+        transform: createSourceParameters('Table'),
       },
     },
   },
@@ -96,7 +96,7 @@ export const Dense: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Table'),
+        transform: createSourceParameters('Table'),
       },
     },
   },
@@ -121,7 +121,7 @@ export const ClickableRows: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Table', {
+        transform: createSourceParameters('Table', {
           events: { rowClick: 'handleRowClick' },
           setup: [
             `const handleRowClick = (row: any) => {`,
@@ -296,7 +296,7 @@ export const EmptyState: Story = {
   parameters: {
     docs: {
       source: {
-        transform: createSourceCodeTransformer('Table'),
+        transform: createSourceParameters('Table'),
       },
     },
   },

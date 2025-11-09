@@ -192,7 +192,32 @@ export function generateSourceCode(options: GenerateSourceCodeOptions): string {
 }
 
 /**
- * Create a source code transformer for Storybook
+ * Create source parameters for Storybook with reactive code generation
+ */
+export function createSourceParameters(
+  componentName: string,
+  options: Partial<Omit<GenerateSourceCodeOptions, 'componentName' | 'args'>> = {}
+) {
+  return {
+    docs: {
+      source: {
+        type: 'dynamic' as const,
+        transform: (_: string, storyContext: any) => {
+          // Force regeneration on every call by using current args
+          const code = generateSourceCode({
+            componentName,
+            args: { ...storyContext.args },
+            ...options,
+          })
+          return code
+        },
+      },
+    },
+  }
+}
+
+/**
+ * Create a source code transformer for Storybook (deprecated - use createSourceParameters)
  */
 export function createSourceCodeTransformer(
   componentName: string,
@@ -203,7 +228,7 @@ export function createSourceCodeTransformer(
     // This ensures that when users change controls, the code updates
     return generateSourceCode({
       componentName,
-      args: storyContext.args,
+      args: { ...storyContext.args },
       ...options,
     })
   }
