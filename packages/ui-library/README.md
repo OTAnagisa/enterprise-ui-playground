@@ -19,9 +19,9 @@ Components are organized following the Atomic Design methodology:
 
 ```
 src/components/
-├── atoms/          # Basic building blocks (Button)
-├── molecules/      # Simple combinations (SearchInput)
-└── organisms/      # Complex compositions
+├── atoms/          # Basic building blocks (Button, TextField, DateInput)
+├── molecules/      # Simple combinations (Card)
+└── organisms/      # Complex compositions (Calendar, Table)
 ```
 
 ## Installation
@@ -91,17 +91,172 @@ A versatile button component with multiple variants.
 **Events:**
 - `click`: Emitted when button is clicked (only when not disabled)
 
-**Usage:**
+### TextField (Atom)
+
+A text input field with label, error states, and various input types.
+
+**Props:**
+- `modelValue`: `string` - The value of the input
+- `label`: `string` - Label text for the input
+- `type`: `'text' | 'email' | 'password' | 'tel' | 'url' | 'number'` - HTML input type (default: `'text'`)
+- `placeholder`: `string` - Placeholder text
+- `disabled`: `boolean` - Whether the input is disabled
+- `required`: `boolean` - Whether the input is required
+- `error`: `string` - Error message to display
+- `helperText`: `string` - Helper text to display below input
+- `fullWidth`: `boolean` - Whether the input should take full width (default: `true`)
+
+**Events:**
+- `update:modelValue`: Emitted when the input value changes
+- `input`: Emitted on input event
+- `change`: Emitted on change event
+- `blur`: Emitted on blur
+- `focus`: Emitted on focus
+
+### DateInput (Atom)
+
+A date input field with calendar icon and date restrictions.
+
+**Props:**
+- `modelValue`: `string` - The date value (YYYY-MM-DD format)
+- `label`: `string` - Label text for the input
+- `min`: `string` - Minimum date allowed (YYYY-MM-DD format)
+- `max`: `string` - Maximum date allowed (YYYY-MM-DD format)
+- `disabled`: `boolean` - Whether the input is disabled
+- `required`: `boolean` - Whether the input is required
+- `error`: `string` - Error message to display
+- `helperText`: `string` - Helper text to display below input
+- `fullWidth`: `boolean` - Whether the input should take full width (default: `true`)
+
+**Events:**
+- `update:modelValue`: Emitted when the date value changes
+- `input`: Emitted on input event
+- `change`: Emitted on change event
+- `blur`: Emitted on blur
+- `focus`: Emitted on focus
+
+### Card (Molecule)
+
+A flexible card component with header, body, and footer sections.
+
+**Props:**
+- `title`: `string` - Card title (used if header slot is not provided)
+- `variant`: `'default' | 'outlined' | 'elevated'` - Visual style variant (default: `'default'`)
+- `padding`: `'none' | 'sm' | 'md' | 'lg'` - Padding size for card body (default: `'md'`)
+- `hoverable`: `boolean` - Whether card shows hover effect (default: `false`)
+- `clickable`: `boolean` - Whether card is clickable (default: `false`)
+
+**Events:**
+- `click`: Emitted when clickable card is clicked
+
+**Slots:**
+- `header`: Custom header content
+- `default`: Card body content
+- `footer`: Footer content
+
+### Calendar (Organism)
+
+A full-featured calendar component with date selection and restrictions.
+
+**Props:**
+- `modelValue`: `Date | null` - Currently selected date
+- `minDate`: `Date` - Minimum selectable date
+- `maxDate`: `Date` - Maximum selectable date
+- `disabledDates`: `Date[]` - Array of disabled dates
+- `locale`: `string` - Locale for date formatting (default: `'en-US'`)
+
+**Events:**
+- `update:modelValue`: Emitted when a date is selected
+- `select`: Emitted when a date is selected
+
+### Table (Organism)
+
+A powerful table component with sorting, custom cells, and various styling options.
+
+**Props:**
+- `columns`: `TableColumn[]` - Array of column definitions
+- `data`: `Record<string, any>[]` - Array of row data
+- `striped`: `boolean` - Whether to stripe table rows (default: `false`)
+- `hoverable`: `boolean` - Whether rows show hover effect (default: `true`)
+- `bordered`: `boolean` - Whether to show borders (default: `false`)
+- `dense`: `boolean` - Whether to use dense padding (default: `false`)
+- `clickableRows`: `boolean` - Whether rows are clickable (default: `false`)
+
+**Events:**
+- `rowClick`: Emitted when a clickable row is clicked
+- `sort`: Emitted when a column is sorted
+
+**TableColumn Interface:**
+```typescript
+interface TableColumn {
+  key: string
+  label: string
+  sortable?: boolean
+  align?: 'left' | 'center' | 'right'
+  width?: string
+  format?: (value: any) => string
+}
+```
+
+**Slots:**
+- `cell-{columnKey}`: Custom cell content for specific column
+- `empty`: Custom empty state content
+
+## Usage Examples
+
+### Basic Usage
 
 ```vue
 <template>
-  <Button variant="primary" @click="handleClick">
-    Click me
-  </Button>
+  <div>
+    <Button variant="primary" @click="handleClick">
+      Click me
+    </Button>
+    
+    <TextField
+      v-model="name"
+      label="Name"
+      placeholder="Enter your name"
+    />
+    
+    <DateInput
+      v-model="birthDate"
+      label="Birth Date"
+    />
+    
+    <Card title="User Profile">
+      <p>Card content goes here</p>
+    </Card>
+    
+    <Calendar v-model="selectedDate" />
+    
+    <Table
+      :columns="columns"
+      :data="data"
+      striped
+      hoverable
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { Button } from 'ui-library'
+import { ref } from 'vue'
+import { Button, TextField, DateInput, Card, Calendar, Table } from 'ui-library'
+import 'ui-library/style.css'
+
+const name = ref('')
+const birthDate = ref('')
+const selectedDate = ref<Date | null>(null)
+
+const columns = [
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'name', label: 'Name', sortable: true },
+]
+
+const data = [
+  { id: 1, name: 'John Doe' },
+  { id: 2, name: 'Jane Smith' },
+]
 
 const handleClick = () => {
   console.log('Button clicked!')
@@ -109,58 +264,7 @@ const handleClick = () => {
 </script>
 ```
 
-### SearchInput (Molecule)
-
-A search input with debounced API suggestions and autocomplete.
-
-**Props:**
-- `modelValue`: `string` - The current value of the input
-- `placeholder`: `string` - Placeholder text (default: `'Search...'`)
-- `debounceMs`: `number` - Debounce delay in milliseconds (default: `300`)
-
-**Events:**
-- `update:modelValue`: Emitted when the input value changes
-- `input`: Emitted on input event
-- `change`: Emitted on change event
-- `submit`: Emitted when the form is submitted (Enter key or form submit)
-
-**API Integration:**
-Makes GET requests to `/api/suggest?q={query}` for suggestions.
-
-Expected response format:
-```json
-{
-  "suggestions": ["suggestion 1", "suggestion 2"],
-  "query": "search term"
-}
-```
-
-**Usage:**
-
-```vue
-<template>
-  <SearchInput
-    v-model="searchQuery"
-    placeholder="Search products..."
-    @submit="handleSearch"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { SearchInput } from 'ui-library'
-
-const searchQuery = ref('')
-
-const handleSearch = (value: string) => {
-  console.log('Search submitted:', value)
-}
-</script>
-```
-
 ## Testing
-
-### Running Tests
 
 Tests are written using Vitest and Testing Library, following the Arrange-Act-Assert pattern.
 
@@ -175,43 +279,6 @@ pnpm test --watch
 pnpm test:coverage
 ```
 
-### Test Structure
-
-Each component includes comprehensive tests:
-
-- **Rendering tests**: Verify component renders correctly with various props
-- **Props tests**: Test prop variations and their effects
-- **Events tests**: Verify events are emitted correctly
-- **API Integration tests**: Test network requests and responses (SearchInput)
-
-Example test structure:
-
-```typescript
-describe('ComponentName', () => {
-  describe('Rendering', () => {
-    it('should render with default props', () => {
-      // Arrange & Act
-      render(Component)
-      
-      // Assert
-      expect(screen.getByRole('...')).toBeInTheDocument()
-    })
-  })
-  
-  describe('Props', () => {
-    it('should apply prop correctly', () => {
-      // Arrange & Act & Assert
-    })
-  })
-  
-  describe('Events', () => {
-    it('should emit event on interaction', async () => {
-      // Arrange & Act & Assert
-    })
-  })
-})
-```
-
 ## Storybook
 
 Storybook provides an interactive environment for developing and testing components.
@@ -221,65 +288,10 @@ pnpm storybook
 ```
 
 Features:
-- **MSW Integration**: Mock API responses for SearchInput suggestions
+- **MSW Integration**: Mock API responses
 - **Controls**: Interactively change props in real-time
 - **Actions**: Monitor emitted events
 - **Docs**: Auto-generated documentation
-
-### MSW Handlers
-
-API mocking is configured in `src/mocks/handlers.ts`:
-
-```typescript
-export const handlers = [
-  http.get('/api/suggest', ({ request }) => {
-    const url = new URL(request.url)
-    const query = url.searchParams.get('q') || ''
-    
-    return HttpResponse.json({
-      suggestions: [/* ... */],
-      query,
-    })
-  }),
-]
-```
-
-Stories can override handlers for specific scenarios (slow API, errors, etc.).
-
-## Project Structure
-
-```
-ui-library/
-├── .storybook/              # Storybook configuration
-│   ├── main.ts              # Storybook main config
-│   └── preview.ts           # Storybook preview config
-├── src/
-│   ├── components/
-│   │   ├── atoms/
-│   │   │   └── Button/
-│   │   │       ├── Button.vue
-│   │   │       ├── Button.stories.ts
-│   │   │       └── Button.test.ts
-│   │   └── molecules/
-│   │       └── SearchInput/
-│   │           ├── SearchInput.vue
-│   │           ├── SearchInput.stories.ts
-│   │           └── SearchInput.test.ts
-│   ├── mocks/
-│   │   └── handlers.ts      # MSW handlers
-│   ├── styles/
-│   │   └── tailwind.css     # TailwindCSS imports
-│   ├── App.vue              # Dev playground app
-│   ├── main.ts              # Dev app entry
-│   └── index.ts             # Library entry point
-├── package.json
-├── tsconfig.json
-├── vite.config.ts
-├── vitest.config.ts
-├── tailwind.config.js
-├── postcss.config.js
-└── README.md
-```
 
 ## Building the Library
 
@@ -294,78 +306,6 @@ This creates:
 - `dist/ui-library.umd.js` - UMD build for legacy support
 - `dist/style.css` - Compiled styles
 - `dist/index.d.ts` - TypeScript declarations
-
-## Using the Library
-
-### Installation (for consumers)
-
-```bash
-npm install ui-library
-# or
-pnpm add ui-library
-# or
-yarn add ui-library
-```
-
-### Import Components
-
-```typescript
-// Import individual components
-import { Button, SearchInput } from 'ui-library'
-import 'ui-library/style.css'
-
-// Or import with tree-shaking
-import Button from 'ui-library/dist/components/atoms/Button/Button.vue'
-```
-
-### TypeScript Support
-
-Full TypeScript support is included with exported types:
-
-```typescript
-import type { ButtonProps, SearchInputProps } from 'ui-library'
-```
-
-## Development Guidelines
-
-### Adding New Components
-
-1. Create component directory in appropriate atomic level (`atoms/`, `molecules/`, or `organisms/`)
-2. Create three files:
-   - `ComponentName.vue` - Component implementation
-   - `ComponentName.stories.ts` - Storybook stories
-   - `ComponentName.test.ts` - Unit tests
-3. Export component from `src/index.ts`
-4. Follow existing patterns for props, events, and styling
-
-### Code Style
-
-- Use TypeScript strict mode
-- Follow Vue 3 Composition API with `<script setup>`
-- Use TailwindCSS utility classes for styling
-- Write tests following Arrange-Act-Assert pattern
-- Document props and events in Storybook stories
-
-### Testing Guidelines
-
-- Test component rendering with various props
-- Test user interactions and event emissions
-- Mock external dependencies (API calls, etc.)
-- Aim for high coverage on critical paths
-- Keep tests readable and maintainable
-
-## Contributing
-
-1. Create a new branch for your feature/fix
-2. Write tests for new functionality
-3. Ensure all tests pass: `pnpm test`
-4. Create Storybook stories for new components
-5. Update documentation as needed
-6. Submit a pull request
-
-## License
-
-MIT
 
 ## Tech Stack
 

@@ -31,8 +31,18 @@ Vue 3、TypeScript、TailwindCSSで構築されたプロダクションレディ
 - ⚡ Viteビルド
 
 **コンポーネント:**
-- Button (Atom) - 多様なバリアントのボタンコンポーネント
-- SearchInput (Molecule) - API連携の検索インプットコンポーネント
+
+**Atoms (基本コンポーネント):**
+- **Button** - 多様なバリアントのボタンコンポーネント (primary, secondary, outline, danger)
+- **TextField** - ラベル、エラー、バリデーション付きのテキスト入力フィールド
+- **DateInput** - カレンダーアイコン付き日付入力フィールド
+
+**Molecules (複合コンポーネント):**
+- **Card** - ヘッダー、ボディ、フッター付きのカードコンポーネント
+
+**Organisms (複雑なコンポーネント):**
+- **Calendar** - 月表示カレンダー、日付選択、制約機能付き
+- **Table** - ソート、カスタムセル、スタイリングオプション付きテーブル
 
 詳細は [packages/ui-library/README.md](./packages/ui-library/README.md) を参照してください。
 
@@ -90,16 +100,6 @@ pnpm build
 pnpm build-storybook
 ```
 
-### その他
-
-```bash
-# リンター実行
-pnpm lint
-
-# クリーンアップ
-pnpm clean
-```
-
 ## 🛠️ 技術スタック
 
 - **Vue 3.4+** - プログレッシブJavaScriptフレームワーク
@@ -136,12 +136,34 @@ pnpm init
 pnpm --filter other-package add ui-library --workspace
 ```
 
-## 🏗️ モノレポのベストプラクティス
+## 🏗️ コンポーネント設計
 
-1. **共通の依存関係**: ルートのpackage.jsonで管理
-2. **個別の依存関係**: 各パッケージのpackage.jsonで管理
-3. **スクリプトの実行**: `pnpm --filter <package-name> <script>`
-4. **並列実行**: `pnpm --parallel --filter "./packages/*" <script>`
+### Atomic Designパターン
+
+このライブラリは、Atomic Designの原則に従っています：
+
+```
+src/components/
+├── atoms/          # 最小の構成要素 (Button, TextField, DateInput)
+├── molecules/      # 複数のatomsの組み合わせ (Card)
+└── organisms/      # 複雑な機能単位 (Calendar, Table)
+```
+
+### 新しいコンポーネントの追加
+
+1. 適切なディレクトリ（atoms/molecules/organisms）にコンポーネントディレクトリを作成
+2. 3つのファイルを作成：
+   - `ComponentName.vue` - コンポーネント実装
+   - `ComponentName.stories.ts` - Storybookストーリー
+   - `ComponentName.test.ts` - ユニットテスト
+3. `src/index.ts`からエクスポート
+
+### コードスタイル
+
+- TypeScript strict mode
+- Vue 3 Composition API with `<script setup>`
+- TailwindCSSユーティリティクラス
+- Arrange-Act-Assertパターンのテスト
 
 ## 📖 ドキュメント
 
@@ -157,32 +179,46 @@ pnpm --filter other-package add ui-library --workspace
 6. ドキュメントを更新
 7. プルリクエストを作成
 
-## 📝 開発ガイドライン
+## 🧪 テストガイドライン
 
-### コンポーネントの追加
+### テスト戦略
 
-1. Atomic Designパターンに従う (atoms/molecules/organisms)
-2. 3つのファイルを作成:
-   - `Component.vue` - コンポーネント実装
-   - `Component.stories.ts` - Storybookストーリー
-   - `Component.test.ts` - ユニットテスト
-3. `src/index.ts`からエクスポート
+- **ユニットテスト**: 各コンポーネントの単体テスト (Vitest + Testing Library)
+- **ビジュアルテスト**: Storybookでのコンポーネント確認
+- **カバレッジ**: 重要なパスの高いカバレッジを目指す
 
-### コードスタイル
+### テストの実行
 
-- TypeScript strict mode
-- Vue 3 Composition API with `<script setup>`
-- TailwindCSSユーティリティクラス
-- Arrange-Act-Assertパターンのテスト
+```bash
+# 全テストを実行
+pnpm test
 
-### テストガイドライン
+# ウォッチモードで実行
+pnpm test --watch
 
-- 様々なpropsでのレンダリングをテスト
-- ユーザーインタラクションとイベントのテスト
-- 外部依存関係のモック
-- 重要なパスの高いカバレッジを目指す
+# カバレッジレポートを生成
+pnpm test:coverage
+```
 
-## 📄 ライセンス
+## 🎨 Storybook
+
+Storybookは、コンポーネントの開発とドキュメント化のための環境を提供します。
+
+```bash
+# Storybookを起動
+pnpm storybook
+
+# Storybookをビルド
+pnpm build-storybook
+```
+
+各コンポーネントには以下のストーリーが含まれます：
+- **Default**: デフォルト状態
+- **バリエーション**: 各props/variantのバリエーション
+- **Interactive**: インタラクティブなデモ
+- **All Variants**: 全バリエーションの表示
+
+## 📝 ライセンス
 
 MIT
 
