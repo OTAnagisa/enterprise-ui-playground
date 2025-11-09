@@ -1,130 +1,231 @@
-# Enterprise Ui Playground
+# Enterprise UI Playground
 
-学習・ポートフォリオ向けのフルスタック **モノレポ構成**。  
-Vue / NestJS / C# の実務に近いアーキテクチャと、テストピラミッドに則した品質戦略を実現。
+エンタープライズグレードのVue 3コンポーネントライブラリのモノレポです。
 
----
+## 🏗️ プロジェクト構成
 
-## 🎯 目的
-
-- 実務レベルの構成でフロント → BFF → マイクロサービス構造を構築
-- きれいな設計・テスト・レイヤー分離・モック戦略を標準化
-- 複数スタックでの差し替えにも対応できる拡張構造
-- AI（Cursor など）でコードベースを生成/改善できる設計
-
----
-
-## 🧪 テスト設計（テストピラミッド）
-
-| 種別 | 対象 | 目的 | 実行頻度 | モック |
-|---|---|---|---|---|
-| **UnitTest (70%目標)** | Logic / Service / Component | 仕様の正しさを高速検証 | PRごと | Moq / vi.mock / Jest Mock |
-| **IntegrationTest (25%)** | DB, 外部結合, Module連携 | 依存と連携の信頼性担保 | merge / nightly | TestContainers / MSW |
-| **Api/E2E (5%以内)** | Endpoint, 実リソース | 最終保証 | 手動 or staging | 実リソース / Playwright |
-
----
-
-## 🏗 アーキテクチャ概要
-
-| レイヤー | 技術 |
-|---|---|
-| UI Library | **Vue 3 + Vite + TailwindCSS + Storybook (MSW)** |
-| Front App | **Vue 3 + Vite + Vitest + @testing-library/vue + vi.mock** |
-| BFF | **NestJS (REST) + Jest + Supertest** |
-| Backend | **C# .NET 8 + Layered Architecture + CosmosDB** |
-| Mapper | **Mapperly（compile-time code generation）** |
-
----
-
-## 📁 推奨ディレクトリ構造
+このリポジトリはpnpmワークスペースを使用したモノレポ構成になっています。
 
 ```
-/ (root)
-├─ README.md
-├─ contracts/ (OpenAPI)
-│  └─ search.yaml
-├─ frontend/
-│  └─ vue/
-│     ├─ ui-library/
-│     │  ├─ src/
-│     │  │  ├─ components/ (atoms/molecules/organisms)
-│     │  │  ├─ composables/
-│     │  │  └─ index.ts
-│     │  ├─ storybook/ (MSW)
-│     │  ├─ tests/ (Vitest + @testing-library/vue)
-│     │  └─ vite.config.ts
-│     └─ example-app/
-│        ├─ src/
-│        │  ├─ pages/
-│        │  ├─ components/ (container/presenter分離)
-│        │  ├─ composables/ (ロジック)
-│        │  └─ services/ (API client)
-│        └─ tests/ (vi.mock)
-├─ bff/
-│  └─ nestjs-rest/
-│     ├─ src/
-│     │  ├─ modules/search/
-│     │  ├─ clients/ (外部API抽象)
-│     │  └─ main.ts
-│     └─ test/ (Jest + Supertest)
-└─ services/
-   └─ csharp-search/
-      ├─ Service1/
-      │  ├─ Application/
-      │  │  ├─ Models/
-      │  │  ├─ Services/
-      │  │  └─ Mappers/ ← **Mapperly**
-      │  ├─ Domain/Models/
-      │  ├─ Infrastructure/Persistence/CosmosDb/
-      │  │  ├─ Repository/
-      │  │  ├─ QueryService.cs
-      │  │  └─ Services.cs
-      │  ├─ WebApi/Controllers/
-      │  └─ Tests/
-      │     ├─ UnitTests/ (Moq)
-      │     ├─ IntegrationTests/ (TestContainer)
-      │     └─ ApiTests/ (実リソース)
+enterprise-ui-playground/
+├── packages/
+│   └── ui-library/           # Vue 3 コンポーネントライブラリ
+├── pnpm-workspace.yaml       # pnpm ワークスペース設定
+├── package.json              # ルート package.json
+└── README.md                 # このファイル
 ```
+
+## 📦 パッケージ
+
+### ui-library
+
+Vue 3、TypeScript、TailwindCSSで構築されたプロダクションレディなコンポーネントライブラリ。
+
+**主な機能:**
+- 🚀 Vue 3 Composition API
+- 📘 TypeScript完全対応
+- 🎨 TailwindCSSスタイリング
+- 📖 Storybook統合
+- 🧪 Vitest + Testing Library
+- 🎭 MSW (Mock Service Worker)
+- ⚡ Viteビルド
+
+**コンポーネント:**
+
+**Atoms (基本コンポーネント):**
+- **Button** - 多様なバリアントのボタンコンポーネント (primary, secondary, outline, danger)
+- **TextField** - ラベル、エラー、バリデーション付きのテキスト入力フィールド
+- **DateInput** - カレンダーアイコン付き日付入力フィールド
+
+**Molecules (複合コンポーネント):**
+- **Card** - ヘッダー、ボディ、フッター付きのカードコンポーネント
+
+**Organisms (複雑なコンポーネント):**
+- **Calendar** - 月表示カレンダー、日付選択、制約機能付き
+- **Table** - ソート、カスタムセル、スタイリングオプション付きテーブル
+
+詳細は [packages/ui-library/README.md](./packages/ui-library/README.md) を参照してください。
+
+## 🚀 クイックスタート
+
+### 前提条件
+
+- Node.js 18+ (推奨: 20+)
+- pnpm 8+
+
+```bash
+# pnpmのインストール (未インストールの場合)
+npm install -g pnpm
+```
+
+### セットアップ
+
+```bash
+# 依存関係のインストール
+pnpm install
+```
+
+## 📜 スクリプト
+
+### 開発
+
+```bash
+# ui-libraryの開発サーバーを起動
+pnpm dev
+
+# Storybookを起動
+pnpm storybook
+```
+
+### テスト
+
+```bash
+# 全パッケージのテストを実行
+pnpm test
+
+# テストをUIで実行
+pnpm test:ui
+
+# カバレッジ付きでテスト
+pnpm test:coverage
+```
+
+### ビルド
+
+```bash
+# 全パッケージをビルド
+pnpm build
+
+# Storybookをビルド
+pnpm build-storybook
+```
+
+## 🛠️ 技術スタック
+
+- **Vue 3.4+** - プログレッシブJavaScriptフレームワーク
+- **TypeScript 5.3+** - 型安全なJavaScript
+- **Vite 5** - 次世代フロントエンドツール
+- **TailwindCSS 3.4** - ユーティリティファーストCSSフレームワーク
+- **Vitest 1.3+** - 超高速ユニットテストフレームワーク
+- **Testing Library** - シンプルで完全なテストユーティリティ
+- **Storybook 7.6+** - UIコンポーネント開発環境
+- **MSW 2+** - APIモックライブラリ
+- **pnpm** - 高速で効率的なパッケージマネージャー
+
+## 📁 ワークスペース構成
+
+### パッケージの追加
+
+新しいパッケージを追加する場合：
+
+```bash
+# packages/配下に新しいディレクトリを作成
+mkdir -p packages/new-package
+
+# package.jsonを作成
+cd packages/new-package
+pnpm init
+```
+
+`pnpm-workspace.yaml`は自動的に`packages/*`配下の全パッケージを認識します。
+
+### パッケージ間の依存関係
+
+```bash
+# ui-libraryを別のパッケージから参照する例
+pnpm --filter other-package add ui-library --workspace
+```
+
+## 🏗️ コンポーネント設計
+
+### Atomic Designパターン
+
+このライブラリは、Atomic Designの原則に従っています：
+
+```
+src/components/
+├── atoms/          # 最小の構成要素 (Button, TextField, DateInput)
+├── molecules/      # 複数のatomsの組み合わせ (Card)
+└── organisms/      # 複雑な機能単位 (Calendar, Table)
+```
+
+### 新しいコンポーネントの追加
+
+1. 適切なディレクトリ（atoms/molecules/organisms）にコンポーネントディレクトリを作成
+2. 3つのファイルを作成：
+   - `ComponentName.vue` - コンポーネント実装
+   - `ComponentName.stories.ts` - Storybookストーリー
+   - `ComponentName.test.ts` - ユニットテスト
+3. `src/index.ts`からエクスポート
+
+### コードスタイル
+
+- TypeScript strict mode
+- Vue 3 Composition API with `<script setup>`
+- TailwindCSSユーティリティクラス
+- Arrange-Act-Assertパターンのテスト
+
+## 📖 ドキュメント
+
+- [UI Library README](./packages/ui-library/README.md) - コンポーネントライブラリの詳細ドキュメント
+
+## 🤝 コントリビューション
+
+1. 新しいブランチを作成
+2. 変更を実装
+3. テストを追加/更新
+4. テストが通ることを確認: `pnpm test`
+5. Storybookストーリーを追加/更新
+6. ドキュメントを更新
+7. プルリクエストを作成
+
+## 🧪 テストガイドライン
+
+### テスト戦略
+
+- **ユニットテスト**: 各コンポーネントの単体テスト (Vitest + Testing Library)
+- **ビジュアルテスト**: Storybookでのコンポーネント確認
+- **カバレッジ**: 重要なパスの高いカバレッジを目指す
+
+### テストの実行
+
+```bash
+# 全テストを実行
+pnpm test
+
+# ウォッチモードで実行
+pnpm test --watch
+
+# カバレッジレポートを生成
+pnpm test:coverage
+```
+
+## 🎨 Storybook
+
+Storybookは、コンポーネントの開発とドキュメント化のための環境を提供します。
+
+```bash
+# Storybookを起動
+pnpm storybook
+
+# Storybookをビルド
+pnpm build-storybook
+```
+
+各コンポーネントには以下のストーリーが含まれます：
+- **Default**: デフォルト状態
+- **バリエーション**: 各props/variantのバリエーション
+- **Interactive**: インタラクティブなデモ
+- **All Variants**: 全バリエーションの表示
+
+## 📝 ライセンス
+
+MIT
+
+## 🔗 リンク
+
+- [Repository](https://github.com/OTAnagisa/enterprise-ui-playground)
 
 ---
 
-## ✅ 設計ルール
-
-### フロント（Vue）
-- UI（pure）とロジック（composables）を分離
-- APIは `services` 層で wrapper 化しモック可能に
-- コンポーネントは **プレゼンテーショナル + コンテナ方式**
-- テストは `@testing-library/vue` で UIの振る舞いを検証
-- Storybook は **MSW でモック**
-
-### BFF（NestJS）
-- Controller は薄く、Service にビジネスロジックを集約
-- 外部APIは `clients/` として抽象化
-- Unit: Jest mock
-- 結合: Nest TestingModule + Supertest
-
-### Backend（C#）
-- Layered Architecture（Application / Domain / Infra / API）
-- DB は CosmosDB、クエリは Repository へ分離
-- マッピングは **Mapperly**
-- Unit: xUnit + Moq
-- Integration: TestContainers
-- API: Staging 実リソースで手動 or CI
-
----
-
-## 🧩 テスト実行コマンド（例）
-
-```sh
-# frontend
-pnpm --filter ui-library test
-pnpm --filter example-app test
-
-# bff
-pnpm --filter nestjs-rest test
-
-# backend
-dotnet test Service1.Tests.UnitTests
-dotnet test Service1.Tests.IntegrationTests --filter Category=Integration
-dotnet test Service1.Tests.ApiTests --filter Category=Api
-```
+Built with ❤️ using Vue 3, TypeScript, and modern web development tools.

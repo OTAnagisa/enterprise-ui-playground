@@ -1,0 +1,30 @@
+{
+  "name": "enterprise-ui-playground",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise UI component library monorepo",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter ui-library dev",
+    "build": "pnpm --filter ui-library build",
+    "test": "pnpm --filter ui-library test",
+    "test:ui": "pnpm --filter ui-library test:ui",
+    "test:coverage": "pnpm --filter ui-library test:coverage",
+    "storybook": "pnpm --filter ui-library storybook",
+    "build-storybook": "pnpm --filter ui-library build-storybook",
+    "lint": "pnpm --parallel --filter \"./packages/*\" lint",
+    "clean": "pnpm --parallel --filter \"./packages/*\" clean"
+  },
+  "keywords": [
+    "monorepo",
+    "vue3",
+    "component-library",
+    "ui",
+    "typescript"
+  ],
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}
