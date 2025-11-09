@@ -68,5 +68,10 @@
     "ui",
     "typescript",
     "vite"
-  ]
+  ],
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }
