@@ -21,6 +21,12 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    docs: {
+      source: {
+        type: 'dynamic',
+        state: 'open',
+      },
+    },
   },
   loaders: [mswLoader],
 }

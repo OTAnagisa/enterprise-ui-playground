@@ -201,15 +201,17 @@ export function createSourceParameters(
   return {
     docs: {
       source: {
+        // Set to 'dynamic' to enable real-time updates when controls change
         type: 'dynamic' as const,
-        transform: (_: string, storyContext: any) => {
-          // Force regeneration on every call by using current args
-          const code = generateSourceCode({
+        // Force code regeneration on every render
+        transform: (code: string, storyContext: any) => {
+          // Always regenerate code from current args
+          // This ensures that control changes are reflected immediately
+          return generateSourceCode({
             componentName,
-            args: { ...storyContext.args },
+            args: storyContext.args,
             ...options,
           })
-          return code
         },
       },
     },

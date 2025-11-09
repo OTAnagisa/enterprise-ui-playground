@@ -14,13 +14,23 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: 'tag',
+    defaultName: 'Documentation',
   },
   staticDirs: ['../public'],
+  core: {
+    disableTelemetry: true,
+  },
   async viteFinal(config) {
     return mergeConfig(config, {
       resolve: {
         alias: {
           '@': '/src',
+        },
+      },
+      // Ensure fast refresh for better real-time updates
+      server: {
+        hmr: {
+          overlay: true,
         },
       },
     })
