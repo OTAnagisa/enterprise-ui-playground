@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import Button from './Button.vue'
+import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof Button> = {
   title: 'Atoms/Button',
@@ -35,6 +36,15 @@ const meta: Meta<typeof Button> = {
     fullWidth: false,
     type: 'button',
   },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Button Text' },
+        }),
+      },
+    },
+  },
 }
 
 export default meta
@@ -54,15 +64,9 @@ export const Primary: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button variant="primary">
-    Primary Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Primary Button' },
+        }),
       },
     },
   },
@@ -82,15 +86,9 @@ export const Secondary: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button variant="secondary">
-    Secondary Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Secondary Button' },
+        }),
       },
     },
   },
@@ -110,15 +108,9 @@ export const Outline: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button variant="outline">
-    Outline Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Outline Button' },
+        }),
       },
     },
   },
@@ -138,15 +130,9 @@ export const Danger: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button variant="danger">
-    Danger Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Danger Button' },
+        }),
       },
     },
   },
@@ -166,15 +152,9 @@ export const Disabled: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button disabled>
-    Disabled Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Disabled Button' },
+        }),
       },
     },
   },
@@ -194,15 +174,9 @@ export const FullWidth: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <Button full-width>
-    Full Width Button
-  </Button>
-</template>
-
-<script setup lang="ts">
-import { Button } from 'ui-library'
-</script>`,
+        transform: createSourceCodeTransformer('Button', {
+          slots: { default: 'Full Width Button' },
+        }),
       },
     },
   },

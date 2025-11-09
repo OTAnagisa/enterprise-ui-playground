@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3'
 import TextField from './TextField.vue'
+import { createSourceCodeTransformer } from '../../../stories/utils/sourceCodeGenerator'
 
 const meta: Meta<typeof TextField> = {
   title: 'Atoms/TextField',
@@ -47,6 +48,15 @@ const meta: Meta<typeof TextField> = {
   args: {
     fullWidth: true,
   },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'value',
+        }),
+      },
+    },
+  },
 }
 
 export default meta
@@ -60,20 +70,9 @@ export const Default: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <TextField
-    v-model="name"
-    label="Name"
-    placeholder="Enter your name"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { TextField } from 'ui-library'
-
-const name = ref('')
-</script>`,
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'name',
+        }),
       },
     },
   },
@@ -88,20 +87,9 @@ export const WithValue: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <TextField
-    v-model="email"
-    label="Email"
-    type="email"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-import { TextField } from 'ui-library'
-
-const email = ref('user@example.com')
-</script>`,
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'email',
+        }),
       },
     },
   },
@@ -113,6 +101,15 @@ export const Required: Story = {
     placeholder: 'Enter username',
     required: true,
     helperText: 'This field is required',
+  },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'username',
+        }),
+      },
+    },
   },
 }
 
@@ -126,27 +123,17 @@ export const WithError: Story = {
   parameters: {
     docs: {
       source: {
-        code: `<template>
-  <TextField
-    v-model="email"
-    label="Email"
-    type="email"
-    :error="emailError"
-  />
-</template>
-
-<script setup lang="ts">
-import { ref, computed } from 'vue'
-import { TextField } from 'ui-library'
-
-const email = ref('invalid-email')
-const emailError = computed(() => {
-  if (!email.value.includes('@')) {
-    return 'Please enter a valid email address'
-  }
-  return ''
-})
-</script>`,
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'email',
+          setup: [
+            `const emailError = computed(() => {`,
+            `  if (!email.value.includes('@')) {`,
+            `    return 'Please enter a valid email address'`,
+            `  }`,
+            `  return ''`,
+            `})`,
+          ],
+        }),
       },
     },
   },
@@ -158,6 +145,15 @@ export const Disabled: Story = {
     modelValue: 'This field is disabled',
     disabled: true,
   },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'value',
+        }),
+      },
+    },
+  },
 }
 
 export const Password: Story = {
@@ -167,6 +163,15 @@ export const Password: Story = {
     placeholder: 'Enter password',
     helperText: 'Must be at least 8 characters',
   },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'password',
+        }),
+      },
+    },
+  },
 }
 
 export const Number: Story = {
@@ -175,6 +180,15 @@ export const Number: Story = {
     type: 'number',
     placeholder: 'Enter your age',
   },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'age',
+        }),
+      },
+    },
+  },
 }
 
 export const WithHelperText: Story = {
@@ -182,6 +196,15 @@ export const WithHelperText: Story = {
     label: 'Username',
     placeholder: 'Choose a username',
     helperText: 'Username must be 3-20 characters',
+  },
+  parameters: {
+    docs: {
+      source: {
+        transform: createSourceCodeTransformer('TextField', {
+          vModel: 'username',
+        }),
+      },
+    },
   },
 }
 
@@ -208,4 +231,41 @@ export const AllTypes: Story = {
       </div>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <div class="space-y-6 max-w-md">
+    <TextField v-model="text" label="Text Input" placeholder="Enter text" />
+    <TextField v-model="email" label="Email" type="email" placeholder="email@example.com" />
+    <TextField v-model="password" label="Password" type="password" placeholder="Enter password" />
+    <TextField v-model="phone" label="Phone" type="tel" placeholder="(123) 456-7890" />
+    <TextField v-model="number" label="Number" type="number" placeholder="Enter number" />
+    <TextField 
+      v-model="errorField"
+      label="With Error" 
+      error="This field has an error"
+    />
+    <TextField 
+      label="Disabled" 
+      disabled 
+      model-value="This is disabled"
+    />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { TextField } from 'ui-library'
+
+const text = ref('')
+const email = ref('')
+const password = ref('')
+const phone = ref('')
+const number = ref('')
+const errorField = ref('Invalid value')
+</script>`,
+      },
+    },
+  },
 }
