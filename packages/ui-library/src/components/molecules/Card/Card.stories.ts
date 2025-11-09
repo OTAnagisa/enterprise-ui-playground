@@ -78,6 +78,23 @@ export const WithTitle: Story = {
       </Card>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Card title="Card Title">
+    <p class="text-gray-700">
+      This card has a title in the header.
+    </p>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const WithHeaderSlot: Story = {
@@ -125,6 +142,29 @@ export const WithFooter: Story = {
       </Card>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Card title="Card with Footer">
+    <p class="text-gray-700">
+      This card has a footer section with actions.
+    </p>
+    <template #footer>
+      <div class="flex justify-end gap-2">
+        <Button variant="outline">Cancel</Button>
+        <Button variant="primary">Confirm</Button>
+      </div>
+    </template>
+  </Card>
+</template>
+
+<script setup lang="ts">
+import { Card, Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const Outlined: Story = {

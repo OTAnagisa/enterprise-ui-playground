@@ -57,6 +57,26 @@ export const Default: Story = {
     label: 'Name',
     placeholder: 'Enter your name',
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <TextField
+    v-model="name"
+    label="Name"
+    placeholder="Enter your name"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { TextField } from 'ui-library'
+
+const name = ref('')
+</script>`,
+      },
+    },
+  },
 }
 
 export const WithValue: Story = {
@@ -64,6 +84,26 @@ export const WithValue: Story = {
     label: 'Email',
     type: 'email',
     modelValue: 'user@example.com',
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <TextField
+    v-model="email"
+    label="Email"
+    type="email"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { TextField } from 'ui-library'
+
+const email = ref('user@example.com')
+</script>`,
+      },
+    },
   },
 }
 
@@ -82,6 +122,33 @@ export const WithError: Story = {
     type: 'email',
     modelValue: 'invalid-email',
     error: 'Please enter a valid email address',
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <TextField
+    v-model="email"
+    label="Email"
+    type="email"
+    :error="emailError"
+  />
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { TextField } from 'ui-library'
+
+const email = ref('invalid-email')
+const emailError = computed(() => {
+  if (!email.value.includes('@')) {
+    return 'Please enter a valid email address'
+  }
+  return ''
+})
+</script>`,
+      },
+    },
   },
 }
 

@@ -37,6 +37,22 @@ export const Default: Story = {
     },
     template: '<Calendar v-bind="args" />',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Calendar v-model="selectedDate" />
+</template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { Calendar } from 'ui-library'
+
+const selectedDate = ref<Date | null>(null)
+</script>`,
+      },
+    },
+  },
 }
 
 export const WithSelectedDate: Story = {
@@ -125,6 +141,38 @@ export const Interactive: Story = {
       </div>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <div class="space-y-4">
+    <Calendar v-model="selectedDate" />
+    <div class="p-4 bg-gray-50 rounded-md">
+      <p class="text-sm font-medium text-gray-700">Selected Date:</p>
+      <p class="text-lg font-semibold text-gray-900">{{ formattedDate }}</p>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import { Calendar } from 'ui-library'
+
+const selectedDate = ref<Date | null>(null)
+
+const formattedDate = computed(() => {
+  if (!selectedDate.value) return 'No date selected'
+  return new Intl.DateTimeFormat('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(selectedDate.value)
+})
+</script>`,
+      },
+    },
+  },
 }
 
 export const JapaneseLocale: Story = {

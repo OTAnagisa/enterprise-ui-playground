@@ -51,6 +51,21 @@ export const Primary: Story = {
     },
     template: '<Button v-bind="args">Primary Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button variant="primary">
+    Primary Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const Secondary: Story = {
@@ -64,6 +79,21 @@ export const Secondary: Story = {
     },
     template: '<Button v-bind="args">Secondary Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button variant="secondary">
+    Secondary Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const Outline: Story = {
@@ -77,6 +107,21 @@ export const Outline: Story = {
     },
     template: '<Button v-bind="args">Outline Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button variant="outline">
+    Outline Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const Danger: Story = {
@@ -90,6 +135,21 @@ export const Danger: Story = {
     },
     template: '<Button v-bind="args">Danger Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button variant="danger">
+    Danger Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const Disabled: Story = {
@@ -103,6 +163,21 @@ export const Disabled: Story = {
     },
     template: '<Button v-bind="args">Disabled Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button disabled>
+    Disabled Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const FullWidth: Story = {
@@ -116,6 +191,21 @@ export const FullWidth: Story = {
     },
     template: '<Button v-bind="args">Full Width Button</Button>',
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Button full-width>
+    Full Width Button
+  </Button>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }
 
 export const AllVariants: Story = {
@@ -141,4 +231,33 @@ export const AllVariants: Story = {
       </div>
     `,
   }),
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <div class="space-y-4">
+    <div>
+      <Button variant="primary">Primary</Button>
+    </div>
+    <div>
+      <Button variant="secondary">Secondary</Button>
+    </div>
+    <div>
+      <Button variant="outline">Outline</Button>
+    </div>
+    <div>
+      <Button variant="danger">Danger</Button>
+    </div>
+    <div>
+      <Button disabled>Disabled</Button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { Button } from 'ui-library'
+</script>`,
+      },
+    },
+  },
 }

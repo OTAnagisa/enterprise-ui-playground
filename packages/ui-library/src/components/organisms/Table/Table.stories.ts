@@ -62,6 +62,33 @@ export const Default: Story = {
     columns: sampleColumns,
     data: sampleData,
   },
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Table :columns="columns" :data="data" />
+</template>
+
+<script setup lang="ts">
+import { Table } from 'ui-library'
+import type { TableColumn } from 'ui-library'
+
+const columns: TableColumn[] = [
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'email', label: 'Email', sortable: true },
+  { key: 'role', label: 'Role', sortable: true },
+  { key: 'status', label: 'Status', align: 'center' },
+]
+
+const data = [
+  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Admin', status: 'Active' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'User', status: 'Active' },
+]
+</script>`,
+      },
+    },
+  },
 }
 
 export const Striped: Story = {
@@ -69,6 +96,35 @@ export const Striped: Story = {
     columns: sampleColumns,
     data: sampleData,
     striped: true,
+  },
+  parameters: {
+    docs: {
+      source: {
+        code: `<template>
+  <Table
+    :columns="columns"
+    :data="data"
+    striped
+  />
+</template>
+
+<script setup lang="ts">
+import { Table } from 'ui-library'
+import type { TableColumn } from 'ui-library'
+
+const columns: TableColumn[] = [
+  { key: 'id', label: 'ID', sortable: true },
+  { key: 'name', label: 'Name', sortable: true },
+  { key: 'email', label: 'Email' },
+]
+
+const data = [
+  { id: 1, name: 'John Doe', email: 'john@example.com' },
+  { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
+]
+</script>`,
+      },
+    },
   },
 }
 
