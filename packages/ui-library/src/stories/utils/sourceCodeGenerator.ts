@@ -55,8 +55,12 @@ export function generateSourceCode(options: GenerateSourceCodeOptions): string {
     events = {},
   } = options
 
-  // Filter out default/undefined props
+  // Filter out default/undefined props and event handlers
   const propsToRender = Object.entries(args).filter(([key, value]) => {
+    // Skip event handlers (onClick, onInput, etc.)
+    if (key.startsWith('on') && key.length > 2 && key[2] === key[2].toUpperCase()) {
+      return false
+    }
     // Skip if value is undefined, null, or default value
     if (value === undefined || value === null) return false
     // Skip boolean false values (we'll add them explicitly if true)
@@ -102,25 +106,7 @@ export function generateSourceCode(options: GenerateSourceCodeOptions): string {
     templateProps.push(`@${toKebabCase(event)}="${handler}"`)
   })
 
-  // Build template
-  const propsString = templateProps.length > 0
-    ? '\n    ' + templateProps.join('\n    ')
-    : ''
-
-  let template = ''
-  if (slots.default) {
-    template = `<template>
-  <${componentName}${propsString}>
-    ${slots.default}
-  </${componentName}>
-</template>`
-  } else {
-    template = `<template>
-  <${componentName}${propsString} />
-</template>`
-  }
-
-  // Build script setup
+  // Build script setup first
   const allImports = ['vue', componentName, ...imports]
   const setupLines: string[] = []
 
@@ -182,9 +168,27 @@ export function generateSourceCode(options: GenerateSourceCodeOptions): string {
     scriptContent += setup.join('\n') + '\n'
   }
 
-  const script = `\n<script setup lang="ts">\n${scriptContent}</script>`
+  const script = `<script setup lang="ts">\n${scriptContent}</script>`
 
-  return template + script
+  // Build template after script
+  const propsString = templateProps.length > 0
+    ? '\n    ' + templateProps.join('\n    ')
+    : ''
+
+  let template = ''
+  if (slots.default) {
+    template = `\n<template>
+  <${componentName}${propsString}>
+    ${slots.default}
+  </${componentName}>
+</template>`
+  } else {
+    template = `\n<template>
+  <${componentName}${propsString} />
+</template>`
+  }
+
+  return script + template
 }
 
 /**
@@ -195,6 +199,8 @@ export function createSourceCodeTransformer(
   options: Partial<Omit<GenerateSourceCodeOptions, 'componentName' | 'args'>> = {}
 ) {
   return (_: string, storyContext: any) => {
+    // Use all current args from the story context
+    // This ensures that when users change controls, the code updates
     return generateSourceCode({
       componentName,
       args: storyContext.args,
