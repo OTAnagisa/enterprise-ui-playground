@@ -15,7 +15,6 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
-  staticDirs: ['../public'],
   async viteFinal(config) {
     return mergeConfig(config, {
       resolve: {
